@@ -1,6 +1,81 @@
 import React, { Component } from 'react'
-
+import axios from 'axios'
 export default class Loginpage extends Component {
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+             name: "",
+            email: "",
+            password: "",
+            gender: "",
+            date: "",
+            logEmail: "",
+            logPassword: "",
+            id: "",
+            isLogin: false
+        }
+    }
+
+    handler = (e) => {
+        this.setState({
+            [e.target.name] : e.target.value
+        })
+    }
+    logUser = (e) => {
+         e.preventDefault()
+        const loger = {
+            email: this.state.logEmail,
+            password: this.state.logPassword
+        }
+        axios({
+            url: "http://localhost:5000/api/v1/fackbook/login",
+            method: "POST",
+            headers: {
+                "Content-Type" : 'application/json'
+            },
+            data: loger
+        }).then(res => {
+            this.setState({
+                logEmail: "",
+                logPassword: "",
+            isLogin : true
+            })
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+    createUser = async (e) => {
+        e.preventDefault()
+        const user = {
+            name: this.state.name,
+            email: this.state.email,
+            password: this.state.password,
+            gender: this.state.gender,
+            date: this.state.date
+        }
+
+      axios({
+            url: 'http://localhost:5000/api/v1/fackbook/signup',
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data:user
+      }).then(res => {
+         this.setState({
+             name: "",
+            email: "",
+            password: "",
+            gender: "",
+            date: "",
+        })
+      })
+          .catch(err => console.log(err))
+        
+       
+    }
     render() {
         return (
             <div style={{background:"#cfd1d4",height:"90vh"}}>
@@ -13,19 +88,19 @@ export default class Loginpage extends Component {
                 <div class="card">
                     <div class="card-body">
                         <div className='my-2'>
-                            <input type="text" className='btn-block p-2' name="" id="" placeholder='Enter User Email' style={{borderRadius:"5px"}}/>
+                                    <input type="text" className='btn-block p-2' name="logEmail" id="" placeholder='Enter User Email' style={{ borderRadius: "5px" }} onChange={this.handler}/>
                         </div>
                         <div className='my-2'>
-                            <input type="text" className='btn-block p-2' placeholder='Enter User Password' style={{borderRadius:"5px"}}/>
+                            <input type="text" className='btn-block p-2' placeholder='Enter User Password' name="logPassword" style={{borderRadius:"5px"}} onChange={this.handler}/>
                         </div>
                         <div className='my-2'>
-                            <button className='mycol btn btn-block'>Log In</button>
+                            <button className='mycol btn btn-block' onClick={this.logUser} >Log In</button>
                         </div>
                         <div>
                             <a href="/">Forgotten password?</a>
                         </div>
                         <hr/>
-                        <button className='btn mycol2' data-toggle="modal" data-target="#exampleModal" >Create New Account</button>
+                        <button className='btn mycol2' data-toggle="modal" data-target="#exampleModal"  >Create New Account</button>
 
 
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -56,15 +131,15 @@ export default class Loginpage extends Component {
                                 <div>
                                     <input type="text" placeholder="Enter occupation"/>
                                 </div> */}
-                                <input class="form-control my-2" type="text" placeholder="Enter name" />
-                                <input class="form-control my-2" type="email" placeholder="Enter email" />
-                                <input class="form-control my-2" type="number" placeholder="Enter password" />
-                                <select class="form-control my-2">
+                                <input class="form-control my-2" type="text" placeholder="Enter name" onChange={this.handler} name="name" />
+                                <input class="form-control my-2" type="email" placeholder="Enter email" onChange={this.handler} name="email"/>
+                                <input class="form-control my-2" type="number" placeholder="Enter password" onChange={this.handler} name="password"/>
+                                <select class="form-control my-2" onChange={this.handler} name="gender">
                                     <option selected>Select Gender</option>
                                     <option>Male</option>
                                     <option>Female</option>
                                 </select>
-                                <input class="form-control my-2" type="date" placeholder="Enter password" />
+                                <input class="form-control my-2" type="date" onChange={this.handler} name="date"/>
 
 
 
@@ -72,7 +147,7 @@ export default class Loginpage extends Component {
 
                             </div>
                             <div class="m-3">
-                                <button type="button" class="btn mycol2">Sign Up</button>
+                                <button type="button" class="btn mycol2" onClick={this.createUser}>Sign Up</button>
                             </div>
                             </div>
                         </div>

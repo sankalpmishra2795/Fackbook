@@ -12,7 +12,7 @@ export default class Navbar extends Component {
                         <i class="fab fa-facebook-f fa-2x m-1" style={{}}></i>
                         <span class="mb-0 h1" style={{}}>ackbook</span>
                     </div>
-                <Route path='/' component={Loginpage} />
+                <Route exact path='/' component={Loginpage} />
                 <Route path='/profile' component={Profile} />
             </>
         )
