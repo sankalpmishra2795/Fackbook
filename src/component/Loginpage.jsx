@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import { connect} from "react-redux"
+import {loginUser} from '../redux/Action'
 import axios from 'axios'
-export default class Loginpage extends Component {
+
+
+class LoginPage extends Component {
     constructor(props) {
         super(props)
     
@@ -23,28 +27,14 @@ export default class Loginpage extends Component {
         })
     }
     logUser = (e) => {
-         e.preventDefault()
+        e.preventDefault()
+        const {loginUser} = this.props
         const loger = {
             email: this.state.logEmail,
             password: this.state.logPassword
         }
-        axios({
-            url: "http://localhost:5000/api/v1/fackbook/login",
-            method: "POST",
-            headers: {
-                "Content-Type" : 'application/json'
-            },
-            data: loger
-        }).then(res => {
-            this.setState({
-                logEmail: "",
-                logPassword: "",
-            isLogin : true
-            })
-            console.log(res);
-        }).catch(err => {
-            console.log(err);
-        })
+        loginUser (loger)
+       
     }
     createUser = async (e) => {
         e.preventDefault()
@@ -77,6 +67,7 @@ export default class Loginpage extends Component {
        
     }
     render() {
+        console.log(this.props.myState,'state---');
         return (
             <div style={{background:"#cfd1d4",height:"90vh"}}>
                 <div className='container-flud row text-center'> 
@@ -161,3 +152,14 @@ export default class Loginpage extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    myState: state
+})
+
+const mapDispatchToProps = {
+    loginUser : loginUser
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)
